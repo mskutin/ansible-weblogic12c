@@ -1,0 +1,24 @@
+# ==> Install Fussion Middleware Infrastructure Software
+- name: Create installer directory
+  file: 
+    state: directory
+    path: "{{ mw_installer_folder }}"
+    owner: "{{ oracle_user }}"
+    group: "{{ oracle_group }}"
+
+- name: Copy Weblogic installation distributive on remote
+  synchronize:
+    src: "{{ mw_installer }}"
+    dest: "{{ mw_installer_folder }}"
+
+- name: Copy file for silent installation
+  template: src=silent-weblogic.txt dest={{ mw_installer_folder }}
+- name: Copy OraInst.loc
+  template: src=oraInst.loc dest={{ mw_installer_folder }}
+- name: execute Weblogic installer
+  command: "{{ jdk_folder }}/bin/java -Xms1024m -Xmx1024m -jar {{ mw_installer_folder }}/{{ mw_installer }} -silent -responseFile {{ mw_installer_folder }}/silent-weblogic.txt -invPtrLoc {{ mw_installer_folder }}/oraInst.loc"
+- name: Update 'JVM_ARGS' variable within wlst script
+  lineinfile:
+    dest: "{{ middleware_common_home }}/common/bin/wlst.sh"
+    regexp: '^JVM_ARGS='
+    line: JVM_ARGS="-Dprod.props.file='${WL_HOME}'/.product.properties ${WLST_PROPERTIES} ${JVM_D64} ${UTILS_MEM_ARGS} ${COMMON_JVM_ARGS} ${CONFIG_JVM_ARGS} -Djava.security.egd=file:///dev/urandom"

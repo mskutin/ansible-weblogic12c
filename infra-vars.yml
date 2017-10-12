@@ -1,0 +1,23 @@
+# Oracle os user and group
+oracle_user: 'oracle'
+oracle_group: 'oinstall'
+# Software and configuration main directory
+oracle_base: '/oracle/fmw12.2.1'
+
+# JDK installer and target folder
+jdk_installation_archive: 'jdk-8u66-linux-x64.tar.gz'
+jdk_folder: '{{ oracle_base }}/jdk1.8.0_66'
+
+# fmw installer
+mw_installer: 'fmw_12.2.1.2.0_infrastructure.jar'
+
+# Domain Name
+domain_name: 'custom_domain'
+
+# Nodemanager and server settings
+node_manager_listen_port: '5556'
+node_manager_listen_address: 'localhost'
+admin_server_hostname: 'localhost'
+admin_server_port: '7001'
+managed_server_name: 'managed_1'
+managed_server_port: '7003'
